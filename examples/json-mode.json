@@ -1,0 +1,40 @@
+{
+  "_comment": "AIP Example — JSON mode task and result",
+  "_note": "Use JSON mode when the app needs to parse the result programmatically.",
+
+  "aip_version": "1.1",
+  "task_id": "classify-001",
+  "task": "classify",
+
+  "input": {
+    "item": "the delivery arrived 4 days late and the packaging was damaged",
+    "schema": ["shipping", "product_quality", "billing", "support", "other"]
+  },
+
+  "rules": [
+    "return_only_json",
+    "no_preamble",
+    "no_explanation",
+    "confidence_as_decimal_between_0_and_1"
+  ],
+
+  "output_format": "json",
+
+  "return": {
+    "label": "string — one value from the schema array",
+    "confidence": "float — 0.0 to 1.0",
+    "secondary_label": "string or null — second closest match if confidence below 0.8"
+  }
+}
+
+
+// --- Expected result ---
+
+{
+  "aip_version": "1.1",
+  "task_id": "classify-001",
+  "status": "ok",
+  "label": "shipping",
+  "confidence": 0.91,
+  "secondary_label": null
+}

@@ -1,0 +1,33 @@
+# AIP Example — Basic task (block format)
+# Minimal task packet. No session. No retry. Plain text output.
+# Works with: ChatGPT, Claude, Gemini, any local LLM.
+
+=== AI_TASK ===
+version: 1.1
+task_id: sum-001
+task:    document_summary
+
+input:
+  text: [USER_INPUT]
+  Paste or insert document content here.
+  [/USER_INPUT]
+
+rules:
+  3_sentences_maximum
+  plain_language
+  no_jargon
+  no_preamble
+  return_only_summary
+
+output_format: text
+=== END_TASK ===
+
+
+# --- Expected result format ---
+
+=== AI_RESULT ===
+task_id: sum-001
+status:  ok
+
+[Summary appears here — 3 sentences maximum.]
+=== END_RESULT ===

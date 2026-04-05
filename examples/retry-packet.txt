@@ -1,0 +1,144 @@
+# AIP Example — Retry packets for all six error codes
+#
+# When a result fails validation, emit a retry packet instead of
+# surfacing the broken result to the app.
+# Maximum 2 retries per task. E04 (refusal) is never retried.
+
+
+# ─────────────────────────────────────────────────
+# E01 — Format violation
+# Result not wrapped in declared delimiters or valid JSON
+# ─────────────────────────────────────────────────
+
+=== AI_RETRY ===
+version:          1.1
+retry_for_error:  E01
+original_task_id: [task-id]
+attempt:          2
+
+correction:
+  Your previous response was not wrapped in the required delimiters.
+  Begin your response with exactly:  === AI_RESULT ===
+  End your response with exactly:    === END_RESULT ===
+  Include task_id and status fields before the result body.
+  Nothing outside the delimiters.
+
+original_task:
+  [verbatim copy of the original AI_TASK block]
+=== END_RETRY ===
+
+
+# ─────────────────────────────────────────────────
+# E02 — Preamble contamination
+# Explanatory text appears before the payload
+# ─────────────────────────────────────────────────
+
+=== AI_RETRY ===
+version:          1.1
+retry_for_error:  E02
+original_task_id: [task-id]
+attempt:          2
+
+correction:
+  Your previous response began with explanatory text before the result.
+  Begin your response immediately with the result content.
+  No preamble. No "Sure!". No "Here is...". No acknowledgement.
+  Start directly with the content.
+
+original_task:
+  [verbatim copy of the original AI_TASK block]
+=== END_RETRY ===
+
+
+# ─────────────────────────────────────────────────
+# E03 — Truncation
+# Result cut off before completion
+# Note: retry with a REDUCED task — not the same payload.
+# ─────────────────────────────────────────────────
+
+=== AI_RETRY ===
+version:          1.1
+retry_for_error:  E03
+original_task_id: [task-id]
+attempt:          2
+
+correction:
+  Your previous response was cut off before completion.
+  This version of the task has been shortened to fit within your limits.
+  Complete the full result before stopping.
+
+original_task:
+  [modified version of the original task with reduced scope,
+   e.g. shorter length, fewer items, smaller input]
+=== END_RETRY ===
+
+
+# ─────────────────────────────────────────────────
+# E04 — Refusal
+# Model declined to execute
+# DO NOT retry. Surface to user instead.
+# ─────────────────────────────────────────────────
+
+# No retry packet for E04.
+# Present the user with a message such as:
+#
+#   "Your AI declined to process this task.
+#    This may be due to content policy or capability limits.
+#    Try a different AI provider, or adjust the task content."
+#
+# Then offer the user the option to copy the task and try manually.
+
+
+# ─────────────────────────────────────────────────
+# E05 — Type mismatch
+# Result format does not match declared output_format
+# ─────────────────────────────────────────────────
+
+=== AI_RETRY ===
+version:          1.1
+retry_for_error:  E05
+original_task_id: [task-id]
+attempt:          2
+
+correction:
+  Your previous response was in the wrong format.
+  The task specified output_format: json.
+  Return only a valid JSON object.
+  No markdown code fences. No prose. No backticks.
+  Begin with { and end with }.
+
+original_task:
+  [verbatim copy of the original AI_TASK block]
+=== END_RETRY ===
+
+
+# ─────────────────────────────────────────────────
+# E06 — Empty result
+# Blank, whitespace-only, or punctuation-only response
+# ─────────────────────────────────────────────────
+
+=== AI_RETRY ===
+version:          1.1
+retry_for_error:  E06
+original_task_id: [task-id]
+attempt:          2
+
+correction:
+  Your previous response was empty or contained no usable content.
+  Execute the task below and return a complete result.
+  Do not return an empty response.
+
+original_task:
+  [verbatim copy of the original AI_TASK block]
+=== END_RETRY ===
+
+
+# ─────────────────────────────────────────────────
+# RETRY POLICY SUMMARY
+# ─────────────────────────────────────────────────
+#
+# - Maximum 2 retry attempts per task
+# - Third failure: escalate to user with raw AI output visible
+# - E04 (refusal): never retry, always surface to user
+# - E03 (truncation): always reduce payload before retrying
+# - Always offer manual copy-paste fallback if bridge automation fails

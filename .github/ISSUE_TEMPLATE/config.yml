@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the specification
+    url: https://github.com/HerGotSystems/aip-protocol/tree/main/spec/AIP-v1.1.md
+    about: Start with the browser-readable reference spec in this repo.

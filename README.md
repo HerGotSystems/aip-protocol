@@ -1,51 +1,27 @@
-# AIP — Artificial Intelligence Prompt Protocol
-
+AIP — Artificial Intelligence Prompt Protocol
 ![Status: Public Draft](https://img.shields.io/badge/status-public_draft-1f6feb)
 ![Version: 1.1](https://img.shields.io/badge/version-1.1-111111)
 ![License: CC BY 4.0](https://img.shields.io/badge/license-CC_BY_4.0-0a7f3f)
-
-**An open protocol standard for AI-agnostic software.**
-
-Apps generate structured task packets. Users execute them with whatever AI they already have. No API keys. No vendor lock-in. No inference costs.
-
+AIP is an open format for AI-agnostic software.
+Apps generate structured tasks.  
+Users run them with any AI they already have.  
+No API keys. No inference costs. No vendor lock-in.
 ---
-
-## Why this exists
-
-Most “AI apps” are really wrappers around someone else’s model API.
-
-That creates the same failure pattern every time:
-
-- the developer pays for inference
-- the product inherits vendor risk
-- the app becomes fragile when APIs change
-- users lose control over which AI they trust or already subscribe to
-
-**AIP flips that model.**  
-The app does not run the AI. The app emits a structured task. The user runs that task with their own AI. The result comes back in a format the app can parse.
-
-That makes AIP useful for:
-- AI task consoles
-- browser tools
-- mobile utilities
-- internal workflow apps
-- bridge automations
-- local-first or privacy-sensitive software
-
+Start here:
+Try the console — generate a task packet in 30 seconds
+Landing page — what AIP is and why it exists
+Spec — the full protocol specification
+Examples — ready-to-use packet templates
 ---
-
-## The idea in one screen
-
-**App generates this:**
-
-```text
+How it works
+```
 === AI_TASK ===
 version: 1.1
 task:    document_summary
 
 input:
   text: [USER_INPUT]
-  ... user's document content ...
+  ... any document ...
   [/USER_INPUT]
 
 rules:
@@ -56,143 +32,64 @@ rules:
 output_format: text
 === END_TASK ===
 ```
-
-**User runs it with their AI.**
-
-**AI returns this:**
-
-```text
-=== AI_RESULT ===
-task_id: sum-001
-status:  ok
-
-The document outlines a proposed change to the company's expense
-policy, reducing the pre-approval threshold from £500 to £250.
-It takes effect from the first of next month and applies to all departments.
-=== END_RESULT ===
+1. App generates a packet like this.  
+2. User pastes it into ChatGPT, Claude, Gemini, or any local model.  
+3. Result comes back in a structured format the app can read.
+That's it. No model API. No cost. Works with any AI, now and in the future.
+---
+Why this exists
+Most "AI apps" are wrappers around a model API. That creates the same failure pattern every time:
+developer pays per inference
+app inherits vendor risk
+product breaks when APIs change
+user has no say in which AI they trust
+AIP flips the model. The app emits a task. The user's AI executes it. The result comes back structured. The AI is already in the user's pocket — AIP just gives it a job to do.
+---
+What's in this repo
 ```
-
-**App reads the result. Done.**  
-No model API call required.
-
----
-
-## Repository layout
-
-```text
-/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   └── config.yml
-│   └── pull_request_template.md
-├── docs/
-│   ├── AIP-landing.html
-│   └── index.html
-├── examples/
-│   ├── basic-task.txt
-│   ├── json-mode.json
-│   └── stateful-session.txt
-├── reference/
-│   └── AIP-v1.1-spec.html
-├── spec/
-│   └── AIP-v1.1.md
-├── .gitignore
-├── CHANGELOG.md
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── GOVERNANCE.md
-├── LICENSE.txt
-├── README.md
-├── RELEASE_NOTES.md
-└── SECURITY.md
+docs/
+  index.html          — front door (GitHub Pages entry point)
+  console.html        — interactive task packet generator
+  AIP-landing.html    — full public landing page
+spec/
+  AIP-v1.1.md         — canonical specification
+examples/
+  basic-task.txt      — minimal block format task
+  json-mode.json      — JSON mode task and result
+  stateful-session.txt — multi-turn session with history
+  retry-packet.txt    — retry packets for all six error codes
+reference/
+  AIP-v1.1-spec.html  — rendered spec (open in browser)
 ```
-
 ---
-
-## Start here
-
-1. Open `docs/AIP-landing.html` for the public overview.
-2. Open `reference/AIP-v1.1-spec.html` for the browser-readable spec.
-3. Read `spec/AIP-v1.1.md` for the canonical source.
-4. Use `examples/` to test parsers, prompts, bridges, and app flows.
-
-Both HTML files are offline-safe and do not depend on external font CDNs.
-
+Standard task types
+Type	What it does
+`document_summary`	Summarise any document
+`rewrite`	Change the tone or style of text
+`translate`	Translate to any language
+`classify`	Sort an item into your categories
+`lyrics`	Write song lyrics
+`painting_ideas`	Generate visual concepts
+`learning_activity`	Create an activity for a learner
+`story_generation`	Write a short story
+`logic_reasoning`	Work through a problem
+`session_summarise`	Compress a conversation history
+Custom types use reverse-domain namespacing: `com.yourapp.task_name`
 ---
-
-## What v1.1 covers
-
-| Area | What it defines |
-|---|---|
-| Architecture | The BYO-AI model and why it differs from API-coupled AI |
-| Packet format | Block format and JSON mode |
-| Task registry | Standard task identifiers and custom namespacing |
-| Error handling | Failure codes, validation, and retry packets |
-| Versioning | MAJOR.MINOR release rules |
-| Context persistence | Session envelopes, history pruning, summarisation |
-| Trust model | Input boundaries, sanitisation, and safety posture |
-
+Contributing
+See CONTRIBUTING.md for the full process.
+Short version:
+Spec issue? Open a `spec-clarification` or `spec-bug` issue
+New task type? Open a `task-type-proposal` issue — include a working example
+Structural change? Open a `major-proposal` issue — requires independent implementation
 ---
-
-## What this repo is for
-
-This repo is meant to be a **publishable protocol package**, not just a note dump.
-
-It gives you:
-- a canonical spec
-- browser-readable reference pages
-- examples that can be pasted into real systems
-- contributor and governance scaffolding for public discussion
-
+Repo files
+File	Purpose
+CHANGELOG.md	What changed and when
+CONTRIBUTING.md	How to propose changes
+GOVERNANCE.md	Stewardship and decision model
+SECURITY.md	How to report protocol-level risks
+CODE_OF_CONDUCT.md	How we work together
+LICENSE.txt	CC BY 4.0 — free to use and build on
 ---
-
-## Suggested release posture
-
-AIP v1.1 should be presented as:
-
-> **A public draft standard for Bring Your Own AI software.**
-
-That wording is strong enough to ship and honest enough to invite feedback.
-
----
-
-## Next practical builds
-
-AIP becomes much stronger with live reference implementations around it.
-
-High-value next steps:
-- AI Task Console reference app
-- parser / validator library
-- bridge automation for desktop and mobile handoff
-- compatibility examples for ChatGPT, Claude, Gemini, and local models
-
----
-
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a proposal or pull request.
-
-When proposing protocol changes:
-- name the exact section
-- show the compatibility impact
-- include an example packet when possible
-- explain why the change improves interoperability
-
----
-
-## Stewardship
-
-Current status:
-- **Status:** Public draft
-- **Steward:** EMVY CHECK
-- **Model:** Founder-led draft stewardship, open to implementer feedback
-
-See [GOVERNANCE.md](GOVERNANCE.md) for the current change model.
-
----
-
-## License / use
-
-See [LICENSE.txt](LICENSE.txt).
-
-This package is intended to be easy to read, discuss, implement, and extend. If you publish derivative work, keep the protocol wording clear and avoid implying official compatibility where none has been tested.
+Build once. Run with any AI.

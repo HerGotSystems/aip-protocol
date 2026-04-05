@@ -1,12 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=site/AIP-landing.html">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIP — Artificial Intelligence Prompt Protocol</title>
+<meta name="description" content="An open format for AI-agnostic software. Apps generate tasks. Users run them with any AI.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --mono:ui-monospace,'Cascadia Code','Source Code Pro',Menlo,Consolas,'DejaVu Sans Mono',monospace;
+  --sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ink:#0d0d0b;--ink2:#3d3b36;--ink3:#888680;--ink4:#b8b5ad;
+  --paper:#f7f5f0;--paper2:#efece5;--rule:#d8d4c8;
+  --accent:#0d0d0b;--code-bg:#eceae3;
+}
+@media(prefers-color-scheme:dark){:root{
+  --ink:#e8e4d8;--ink2:#b0ac9f;--ink3:#787570;--ink4:#504e48;
+  --paper:#0f0f0c;--paper2:#161610;--rule:#2a2820;
+  --accent:#e8e4d8;--code-bg:#1a1910;
+}}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+nav{border-bottom:1px solid var(--rule);padding:0 32px;height:48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:20px}
+.nav-links a{font-family:var(--mono);font-size:11px;color:var(--ink3);text-decoration:none;letter-spacing:.04em}
+.nav-links a:hover{color:var(--ink)}
+
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 32px 40px;max-width:860px;margin:0 auto;width:100%}
+.kicker{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--ink3);margin-bottom:20px}
+h1{font-family:var(--mono);font-size:clamp(26px,5vw,50px);font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:20px}
+h1 span{color:var(--ink3)}
+.lead{font-size:17px;font-weight:300;color:var(--ink2);line-height:1.75;max-width:520px;margin-bottom:40px}
+.lead strong{color:var(--ink);font-weight:500}
+
+.packet{background:var(--code-bg);border-left:3px solid var(--accent);padding:20px 22px;font-family:var(--mono);font-size:12px;line-height:1.75;margin-bottom:40px}
+.packet-label{font-size:9px;font-weight:600;letter-spacing:.16em;color:var(--ink3);margin-bottom:12px}
+pre{background:none;border:none;padding:0;white-space:pre-wrap;font-family:var(--mono)}
+.k{font-weight:600;color:var(--ink)}.s{color:var(--ink2)}.c{color:var(--ink4)}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:56px}
+.btn{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;padding:11px 22px;text-decoration:none;display:inline-block;transition:opacity .15s;border:none;cursor:pointer}
+.btn-primary{background:var(--accent);color:var(--paper)}
+.btn-primary:hover{opacity:.8}
+.btn-secondary{border:1px solid var(--rule);color:var(--ink2);background:none}
+.btn-secondary:hover{border-color:var(--ink3);color:var(--ink)}
+
+.how{border-top:1px solid var(--rule);padding-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:600px){.how{grid-template-columns:1fr}}
+.step-num{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-bottom:8px}
+.step-title{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.step-body{font-size:13px;color:var(--ink3);line-height:1.6}
+
+footer{border-top:1px solid var(--rule);padding:18px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-note{font-family:var(--mono);font-size:10px;color:var(--ink4)}
+.footer-links{display:flex;gap:16px}
+.footer-links a{font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none}
+.footer-links a:hover{color:var(--ink)}
+
+@media(max-width:600px){nav,footer{padding:0 20px;height:auto;padding-top:12px;padding-bottom:12px}.hero{padding:40px 20px 32px}}
+</style>
 </head>
 <body>
-  <p>Redirecting to <a href="site/AIP-landing.html">site/AIP-landing.html</a>…</p>
+
+<nav>
+  <a class="nav-logo" href="index.html">AIP/1.1</a>
+  <div class="nav-links">
+    <a href="../spec/AIP-v1.1.md">Spec</a>
+    <a href="../examples/">Examples</a>
+    <a href="console.html">Try it</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="kicker">OPEN PROTOCOL STANDARD</div>
+  <h1>Apps generate tasks.<br><span>Any AI runs them.</span></h1>
+  <p class="lead">AIP is an open format for software that doesn't need to embed AI. Your app produces a structured task packet. The user runs it with <strong>whatever AI they already have.</strong> No API keys. No costs. No lock-in.</p>
+
+  <div class="packet">
+    <div class="packet-label">EXAMPLE — document_summary task packet</div>
+<pre>=== AI_TASK ===
+<span class="k">version:</span> <span class="s">1.1</span>
+<span class="k">task:</span>    <span class="s">document_summary</span>
+
+<span class="k">input:</span>
+  <span class="k">text:</span> <span class="s">[USER_INPUT]
+  ... paste any document here ...
+  [/USER_INPUT]</span>
+
+<span class="k">rules:</span>
+  <span class="s">3_sentences_maximum</span>
+  <span class="s">plain_language</span>
+  <span class="s">no_preamble</span>
+
+<span class="k">output_format:</span> <span class="s">text</span>
+=== END_TASK ===</pre>
+    <div style="margin-top:14px;font-size:11px;color:var(--ink4)">Paste this into ChatGPT, Claude, Gemini, or any local model. Get a result. Done.</div>
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-primary" href="console.html">Try the console</a>
+    <a class="btn btn-secondary" href="../spec/AIP-v1.1.md">Read the spec</a>
+    <a class="btn btn-secondary" href="../examples/">View examples</a>
+  </div>
+
+  <div class="how">
+    <div>
+      <div class="step-num">01</div>
+      <div class="step-title">App generates a task</div>
+      <div class="step-body">Structured AIP packet — plain text, no special tools needed</div>
+    </div>
+    <div>
+      <div class="step-num">02</div>
+      <div class="step-title">User pastes into any AI</div>
+      <div class="step-body">ChatGPT, Claude, Gemini, local model — user's choice, always</div>
+    </div>
+    <div>
+      <div class="step-num">03</div>
+      <div class="step-title">Result comes back</div>
+      <div class="step-body">Structured result packet. App reads it. No API call ever made.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-note">AIP v1.1 — Open draft standard — CC BY 4.0</span>
+  <div class="footer-links">
+    <a href="../reference/AIP-v1.1-spec.html">Full spec</a>
+    <a href="https://github.com/HerGotSystems/aip-protocol">GitHub</a>
+  </div>
+</footer>
+
 </body>
 </html>

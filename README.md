@@ -83,34 +83,35 @@ No model API call required.
 /
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
+│   │   └── config.yml
 │   └── pull_request_template.md
-├── spec/
-│   └── AIP-v1.1.md
+├── docs/
+│   ├── AIP-landing.html
+│   └── index.html
 ├── examples/
 │   ├── basic-task.txt
 │   ├── json-mode.json
-│   ├── retry-packet.txt
 │   └── stateful-session.txt
 ├── reference/
 │   └── AIP-v1.1-spec.html
-├── site/
-│   └── AIP-landing.html
+├── spec/
+│   └── AIP-v1.1.md
+├── .gitignore
 ├── CHANGELOG.md
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── GOVERNANCE.md
 ├── LICENSE.txt
-├── RELEASE_NOTES.md
-├── SECURITY.md
 ├── README.md
-└── index.html
+├── RELEASE_NOTES.md
+└── SECURITY.md
 ```
 
 ---
 
 ## Start here
 
-1. Open `site/AIP-landing.html` for the public overview.
+1. Open `docs/AIP-landing.html` for the public overview.
 2. Open `reference/AIP-v1.1-spec.html` for the browser-readable spec.
 3. Read `spec/AIP-v1.1.md` for the canonical source.
 4. Use `examples/` to test parsers, prompts, bridges, and app flows.
